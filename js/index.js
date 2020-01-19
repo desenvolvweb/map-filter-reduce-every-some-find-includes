@@ -171,4 +171,48 @@ const people = [
 
 const filteredUsers = people.filter( p => p.name.includes( "au" ) )
 
-console.log( filteredUsers )
+// console.log( filteredUsers )
+
+
+
+
+
+/* ==========================================================================
+   API real!
+   ========================================================================== */
+
+async function getPeople() {
+  const response = await fetch( 'https://randomuser.me/api/?results=10' )
+
+  return response.json()
+}
+
+// getPeople().then( data => console.log( data ) )
+
+/* Somente mulheres
+   ========================================================================== */
+
+getPeople().then( data => {
+  const people = data.results
+
+  // console.log( people.filter( p => p.gender === 'female' ) )
+} )
+
+/* Trabalhando com dados
+   ========================================================================== */
+
+getPeople().then( data => {
+  const result = data.results.filter( p => p.dob.age >= 30 )
+  const people = []
+
+  for ( let p of result ) {
+    people.push( {
+      "Nome" : `${ p.name.first } ${ p.name.last }`,
+      "Sexo" : p.gender,
+      "Idade": p.dob.age
+    } )
+  }
+
+  console.table( people )
+} )
+
